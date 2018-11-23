@@ -589,7 +589,7 @@ type NodeState struct {
 	CrmDebugOrigin string   `xml:"crm-debug-origin,attr" json:"crm-debug-origin"`
 	Join           string   `xml:"join,attr" json:"join"`
 	Expected       string   `xml:"expected,attr" json:"expected"`
-	Lrm            []*Lrm   `xml:"lrm" json:"lrm,omitempty"`
+	Lrm            *Lrm     `xml:"lrm" json:"lrm,omitempty"`
 }
 
 type Lrm struct {
