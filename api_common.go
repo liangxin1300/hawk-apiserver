@@ -16,7 +16,7 @@ func (c *Cib) MarshalJSON() ([]byte, error) {
 	var struct_interface interface{}
 
         switch c.Status.URLType {
-	case "all":
+	case "nodes":
 		struct_interface = c.Status.NodeState
 	case "node":
 		index := c.Status.URLIndex

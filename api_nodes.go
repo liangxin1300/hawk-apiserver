@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 func handleConfigNodes(urllist []string, cib Cib) bool {
 
 	if len(urllist) == 4 {
@@ -30,7 +28,7 @@ func handleConfigNodes(urllist []string, cib Cib) bool {
 func handleStateNodes(urllist []string, cib Cib) bool {
 
 	if len(urllist) == 4 {
-		cib.Status.URLType = "all"
+		cib.Status.URLType = "nodes"
 	} else {
 		cib.Status.URLType = "node"
 
