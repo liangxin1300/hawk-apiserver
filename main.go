@@ -209,6 +209,14 @@ func (handler *routeHandler) serveAPI(w http.ResponseWriter, r *http.Request, ro
 		if match {
 			return handleConfigApi(w, r, handler.cib.Get())
 		}
+
+		prefix = route.Path + "/status/"
+		all_types = "(nodes|resources)"
+		match, _ = regexp.MatchString(prefix+all_types+"(/?|/.+/?)$", r.URL.Path)
+		if match {
+			return handleStatusApi(w, r, handler.cib.Get())
+		}
+
 		if strings.HasPrefix(r.URL.Path, prefix+"cib.xml") {
 			xmldoc := handler.cib.Get()
 			w.Header().Set("Content-Type", "application/xml")
