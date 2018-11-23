@@ -574,9 +574,21 @@ type Recipient struct {
 }
 
 type Status struct {
-	XMLNAME  xml.Name `xml:"status" json:"-"`
-	URLType  string   `json:"-"`
-	URLIndex int      `json:"-"`
+        XMLNAME   xml.Name   `xml:"status" json:"-"`
+        NodeState *NodeState `xml:"node_state" json:"node_state,omitempty"`
+        URLType   string     `json:"-"`
+        URLIndex  int        `json:"-"`
+}
+
+type NodeState struct {
+        XMLNAME        xml.Name `xml:"node_state" json:"-"`
+        Id             string   `xml:"id,attr" json:"id"`
+        Uname          string   `xml:"uname,attr" json:"uname"`
+        InCcm          string   `xml:"in_ccm,attr" json:"in_ccm"`
+        Crmd           string   `xml:"crmd,attr" json:"crmd"`
+        CrmDebugOrigin string   `xml:"crm-debug-origin,attr" json:"crm-debug-origin"`
+        Join           string   `xml:"join,attr" json:"join"`
+        Expected       string   `xml:"expected,attr" json:"expected"`
 }
 
 type TypeIndex struct {
