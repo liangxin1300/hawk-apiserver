@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 func handleConfigNodes(urllist []string, cib Cib) bool {
 
 	if len(urllist) == 4 {
@@ -20,6 +22,31 @@ func handleConfigNodes(urllist []string, cib Cib) bool {
 		}
 
 		cib.Configuration.Nodes.URLIndex = index
+	}
+
+	return true
+}
+
+func handleStateNodes(urllist []string, cib Cib) bool {
+
+	if len(urllist) == 4 {
+		cib.Status.URLType = "all"
+	} else {
+		cib.Status.URLType = "node"
+
+		nodeIndex := urllist[4]
+		var index int = -1
+		for i, item := range cib.Status.NodeState {
+			if nodeIndex == item.Uname || nodeIndex == item.Id {
+				index = i
+				break
+			}
+		}
+		if index == -1 {
+			return false
+		}
+
+		cib.Status.URLIndex = index
 	}
 
 	return true
