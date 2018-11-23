@@ -575,7 +575,7 @@ type Recipient struct {
 
 type Status struct {
         XMLNAME   xml.Name   `xml:"status" json:"-"`
-        NodeState *NodeState `xml:"node_state" json:"node_state,omitempty"`
+        NodeState []*NodeState `xml:"node_state" json:"node_state,omitempty"`
         URLType   string     `json:"-"`
         URLIndex  int        `json:"-"`
 }
