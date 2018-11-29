@@ -158,10 +158,24 @@ func handleConfigApi(w http.ResponseWriter, r *http.Request, cib_data string) bo
 		return false
 	}
 
-	urllist := strings.Split(strings.Trim(r.URL.Path, "/"), "/")
-	cib.Configuration.URLType = urllist[3]
+	if !innerMapping(r.URL.Path, cib) {
+		return false
+	}
 
-	w.Header().Set("Content-Type", "application/json")
+	jsonData, jsonError := MarshalOut(r, &cib)
+	if jsonError != nil {
+		log.Error(jsonError)
+		return false
+	}
+
+	io.WriteString(w, string(jsonData)+"\n")
+	return true
+}
+
+func innerMapping(url string, cib Cib)bool {
+
+	urllist := strings.Split(strings.Trim(url, "/"), "/")
+	cib.Configuration.URLType = urllist[3]
 
 	configHandle := map[string]func([]string, Cib) bool{
 		"nodes":        handleConfigNodes,
@@ -177,18 +191,30 @@ func handleConfigApi(w http.ResponseWriter, r *http.Request, cib_data string) bo
 	}
 
 	if !configHandle[cib.Configuration.URLType](urllist, cib) {
-		http.Error(w, fmt.Sprintf("No route for %v.", r.URL.Path), 500)
 		return false
 	}
 
-	jsonData, jsonError := MarshalOut(r, &cib)
-	if jsonError != nil {
-		log.Error(jsonError)
-		return false
-	}
-
-	io.WriteString(w, string(jsonData)+"\n")
 	return true
+}
+
+func getNvpairValue(url string, cib Cib)(string, bool) {
+
+	if !innerMapping(url, cib) {
+		return "", false
+	}
+
+	jsonValue, err := json.Marshal(&cib)
+	if err != nil {
+		return "", false
+	}
+
+	nv := &Nvpair{}
+	err = json.Unmarshal(jsonValue, nv)
+	if err != nil {
+		return "", false
+	}
+
+	return nv.Value, true
 }
 
 func handleStatusApi(w http.ResponseWriter, r *http.Request, cib_data string) bool {
@@ -199,6 +225,9 @@ func handleStatusApi(w http.ResponseWriter, r *http.Request, cib_data string) bo
 		log.Error(err)
 		return false
 	}
+
+	v, _ := getNvpairValue("/api/v1/configuration/cluster/stonith-enabled", cib)
+	fmt.Println(v)
 
 	urllist := strings.Split(strings.Trim(r.URL.Path, "/"), "/")
 	cib.Status.URLType = urllist[3]
