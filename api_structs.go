@@ -578,7 +578,7 @@ type Status struct {
 	NodeState []*NodeState `xml:"node_state" json:"node_state,omitempty"`
 	URLType   string       `json:"-"`
 	URLIndex  int          `json:"-"`
-	NodesResult []*NodesResult `xml:"-" json:"nodes_status,omitempty"`
+	NodeResult []*NodeResult `xml:"-" json:"nodes_status,omitempty"`
 }
 
 type NodeState struct {
@@ -593,7 +593,7 @@ type NodeState struct {
 	Lrm            *Lrm     `xml:"lrm" json:"lrm,omitempty"`
 }
 
-type NodesResult struct {
+type NodeResult struct {
 	Id             string   `xml:"-" json:"id"`
 	Uname          string   `xml:"-" json:"uname"`
 	Status		string  `xml:"-" json:"status"`
