@@ -197,24 +197,24 @@ func innerMapping(url string, cib Cib)bool {
 	return true
 }
 
-func getNvpairValue(url string, cib Cib)(string, bool) {
+func getNvpairValue(url string, cib Cib)(string, int) {
 
 	if !innerMapping(url, cib) {
-		return "", false
+		return "", 1
 	}
 
 	jsonValue, err := json.Marshal(&cib)
 	if err != nil {
-		return "", false
+		return "", 2
 	}
 
 	nv := &Nvpair{}
 	err = json.Unmarshal(jsonValue, nv)
 	if err != nil {
-		return "", false
+		return "", 3
 	}
 
-	return nv.Value, true
+	return nv.Value, 0
 }
 
 func handleStatusApi(w http.ResponseWriter, r *http.Request, cib_data string) bool {
@@ -226,8 +226,12 @@ func handleStatusApi(w http.ResponseWriter, r *http.Request, cib_data string) bo
 		return false
 	}
 
-	v, _ := getNvpairValue("/api/v1/configuration/cluster/stonith-enabled", cib)
-	fmt.Println(v)
+	v, rc := getNvpairValue("/api/v1/configuration/cluster/stonith-enabled", cib)
+	if v == "false" || rc == 1 {
+		fmt.Println("no stonith")
+	} else if v == "true" {
+		fmt.Println("stonith")
+	}
 
 	urllist := strings.Split(strings.Trim(r.URL.Path, "/"), "/")
 	cib.Status.URLType = urllist[3]
