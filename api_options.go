@@ -31,7 +31,7 @@ func handleConfigCluster(urllist []string, cib Cib) bool {
 		}
 
 		if index == -1 {
-			log.Errorf("Option ket \"%s\" not found!", attrIndex)
+			log.Warningf("Option ket \"%s\" not found!", attrIndex)
 			return false
 		}
 
