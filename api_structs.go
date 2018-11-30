@@ -23,6 +23,7 @@ type Cib struct {
 	ExecutionDate   string         `xml:"execution-date,attr" json:"execution-date,omitempty"`
 	Configuration   *Configuration `xml:"configuration" json:"configuration"`
 	Status          *Status        `xml:"status" json:"status,omitempty"`
+	URLType         string           `json:"-"`
 }
 
 type Configuration struct {

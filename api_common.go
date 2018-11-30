@@ -15,6 +15,7 @@ import (
 func (c *Cib) MarshalJSON() ([]byte, error) {
 	var struct_interface interface{}
 
+	if c.URLType == "status" {
         switch c.Status.URLType {
 	case "nodes":
 		n1 := &NodeResult{"123", "node1", "online"}
@@ -25,7 +26,7 @@ func (c *Cib) MarshalJSON() ([]byte, error) {
 		index := c.Status.URLIndex
 		struct_interface = c.Status.NodeState[index]
 	}
-
+	} else {
 	switch c.Configuration.URLType {
 	case "nodes":
 		switch c.Configuration.Nodes.URLType {
@@ -132,7 +133,7 @@ func (c *Cib) MarshalJSON() ([]byte, error) {
 			struct_interface = c.Configuration.FencingTopology.FencingLevel[index]
 		}
 	}
-
+	}
 	jsonValue, err := json.Marshal(struct_interface)
 	return jsonValue, err
 }
@@ -175,7 +176,7 @@ func handleConfigApi(w http.ResponseWriter, r *http.Request, cib_data string) bo
 func innerMapping(url string, cib Cib)bool {
 
 	urllist := strings.Split(strings.Trim(url, "/"), "/")
-	cib.Configuration.URLType = urllist[3]
+	cib.URLType, cib.Configuration.URLType = urllist[2], urllist[3]
 
 	configHandle := map[string]func([]string, Cib) bool{
 		"nodes":        handleConfigNodes,
@@ -244,7 +245,7 @@ func handleStatusApi(w http.ResponseWriter, r *http.Request, cib_data string) bo
 	}
 
 	urllist := strings.Split(strings.Trim(r.URL.Path, "/"), "/")
-	cib.Status.URLType = urllist[3]
+	cib.URLType, cib.Status.URLType = urllist[2], urllist[3]
 
 	w.Header().Set("Content-Type", "application/json")
 
