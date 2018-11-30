@@ -217,6 +217,14 @@ func getNvpairValue(url string, cib Cib)(string, int) {
 	return nv.Value, 0
 }
 
+func determine_online_status_no_fencing(cib Cib) string {
+	return ""
+}
+
+func determine_online_status_fencing(cib Cib) string {
+	return ""
+}
+
 func handleStatusApi(w http.ResponseWriter, r *http.Request, cib_data string) bool {
 	// parse xml into Cib struct
 	var cib Cib
@@ -229,8 +237,10 @@ func handleStatusApi(w http.ResponseWriter, r *http.Request, cib_data string) bo
 	v, rc := getNvpairValue("/api/v1/configuration/cluster/stonith-enabled", cib)
 	if v == "false" || rc == 1 {
 		fmt.Println("no stonith")
+		determine_online_status_no_fencing(cib)
 	} else if v == "true" {
 		fmt.Println("stonith")
+		determine_online_status_fencing(cib)
 	}
 
 	urllist := strings.Split(strings.Trim(r.URL.Path, "/"), "/")
