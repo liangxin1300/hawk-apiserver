@@ -48,4 +48,26 @@
     }
   ]
 }
+
+```
+```json
+{
+  "meta_attributes": [
+    {
+      "id": "op-options",
+      "nvpair": [
+        {
+          "name": "timeout",
+          "id": "op-options-timeout",
+          "value": "600"
+        },
+        {
+          "name": "record-pending",
+          "id": "op-options-record-pending",
+          "value": "true"
+        }
+      ]
+    }
+  ]
+}
 ```
