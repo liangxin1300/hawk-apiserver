@@ -1,7 +1,7 @@
 package main
 
-func handleConfigConstraints(urllist []string, cib Cib) bool {
-
+func handleConfigConstraints(urllist []string, cib Cib) (bool, interface{}) {
+	/*
 	if len(urllist) == 4 {
 		cib.Configuration.Constraints.URLType = "all"
 	} else {
@@ -26,6 +26,6 @@ func handleConfigConstraints(urllist []string, cib Cib) bool {
 			return false
 		}
 	}
-
-	return true
+	*/
+	return true, nil
 }

@@ -1,7 +1,7 @@
 package main
 
-func handleConfigNodes(urllist []string, cib Cib) bool {
-
+func handleConfigNodes(urllist []string, cib Cib) (bool, interface{}) {
+	/*
 	if len(urllist) == 4 {
 		cib.Configuration.Nodes.URLType = "all"
 	} else {
@@ -21,12 +21,12 @@ func handleConfigNodes(urllist []string, cib Cib) bool {
 
 		cib.Configuration.Nodes.URLIndex = index
 	}
-
-	return true
+	*/
+	return true, nil
 }
 
-func handleStateNodes(urllist []string, cib Cib) bool {
-
+func handleStateNodes(urllist []string, cib Cib) (bool, interface{}) {
+	/*
 	if len(urllist) == 4 {
 		cib.Status.URLType = "nodes"
 	} else {
@@ -46,6 +46,6 @@ func handleStateNodes(urllist []string, cib Cib) bool {
 
 		cib.Status.URLIndex = index
 	}
-
-	return true
+	*/
+	return true, nil
 }

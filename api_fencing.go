@@ -1,7 +1,7 @@
 package main
 
-func handleConfigFencing(urllist []string, cib Cib) bool {
-
+func handleConfigFencing(urllist []string, cib Cib) (bool, interface{}) {
+	/*
 	if len(urllist) == 4 {
 		cib.Configuration.FencingTopology.URLType = "all"
 	} else {
@@ -21,6 +21,6 @@ func handleConfigFencing(urllist []string, cib Cib) bool {
 
 		cib.Configuration.FencingTopology.URLIndex = index
 	}
-
-	return true
+	*/
+	return true, nil
 }

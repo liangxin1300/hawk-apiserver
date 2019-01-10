@@ -1,7 +1,7 @@
 package main
 
-func handleConfigTags(urllist []string, cib Cib) bool {
-
+func handleConfigTags(urllist []string, cib Cib) (bool, interface{}) {
+	/*
 	if len(urllist) == 4 {
 		cib.Configuration.Tags.URLType = "all"
 	} else {
@@ -21,6 +21,6 @@ func handleConfigTags(urllist []string, cib Cib) bool {
 
 		cib.Configuration.Tags.URLIndex = index
 	}
-
-	return true
+	*/
+	return true, nil
 }

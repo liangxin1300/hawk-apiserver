@@ -1,7 +1,7 @@
 package main
 
-func handleConfigAlerts(urllist []string, cib Cib) bool {
-
+func handleConfigAlerts(urllist []string, cib Cib) (bool, interface{}) {
+	/*
 	if len(urllist) == 4 {
 		cib.Configuration.Alerts.URLType = "all"
 	} else {
@@ -21,6 +21,6 @@ func handleConfigAlerts(urllist []string, cib Cib) bool {
 
 		cib.Configuration.Alerts.URLIndex = index
 	}
-
-	return true
+	*/
+	return true, nil
 }

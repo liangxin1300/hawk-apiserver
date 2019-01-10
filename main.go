@@ -204,17 +204,10 @@ func (handler *routeHandler) serveAPI(w http.ResponseWriter, r *http.Request, ro
 	if r.Method == "GET" {
 		prefix := route.Path + "/configuration/"
 		// all types below cib/configuration
-		all_types := "(nodes|resources|cluster|constraints|rsc_defaults|op_defaults|alerts|tags|acls|fencing)"
+		all_types := "(nodes|resources|primitives|groups|masters|cluster_property|constraints|rsc_defaults|op_defaults|alerts|tags|acls|fencing)"
 		match, _ := regexp.MatchString(prefix+all_types+"(/?|/.+/?)$", r.URL.Path)
 		if match {
-			return handleConfigApi(w, r, handler.cib.Get())
-		}
-
-		if strings.HasPrefix(r.URL.Path, prefix+"cib.xml") {
-			xmldoc := handler.cib.Get()
-			w.Header().Set("Content-Type", "application/xml")
-			io.WriteString(w, xmldoc)
-			return true
+			return handleConfiguration(w, r, handler.cib.Get())
 		}
 
 		prefix = route.Path + "/status/"
@@ -222,6 +215,13 @@ func (handler *routeHandler) serveAPI(w http.ResponseWriter, r *http.Request, ro
 		match, _ = regexp.MatchString(prefix+all_types+"(/?|/.+/?)$", r.URL.Path)
 		if match {
 			return handleStatusApi(w, r, handler.cib.Get())
+		}
+
+		if strings.HasPrefix(r.URL.Path, prefix+"cib.xml") {
+			xmldoc := handler.cib.Get()
+			w.Header().Set("Content-Type", "application/xml")
+			io.WriteString(w, xmldoc)
+			return true
 		}
 	}
 	http.Error(w, fmt.Sprintf("[api/v1]: No route for %v.", r.URL.Path), 500)

@@ -11,7 +11,7 @@ import (
 )
 
 //go:generate bash gen.sh
-
+/*
 func (c *Cib) MarshalJSON() ([]byte, error) {
 	var struct_interface interface{}
 
@@ -32,7 +32,7 @@ func (c *Cib) MarshalJSON() ([]byte, error) {
 			index := c.Configuration.Nodes.URLIndex
 			struct_interface = c.Configuration.Nodes.Node[index]
 		}
-	case "cluster":
+	case "cluster_property":
 		switch c.Configuration.CrmConfig.URLType {
 		case "all":
 			struct_interface = c.Configuration.CrmConfig
@@ -133,20 +133,20 @@ func (c *Cib) MarshalJSON() ([]byte, error) {
 	jsonValue, err := json.Marshal(struct_interface)
 	return jsonValue, err
 }
-
+*/
 // Common function for pretty print.
 // Give pretty print by default;
 // Give nomal print for efficiency reason,
 // by setting request header "PrettyPrint" as non "1" value on client.
-func MarshalOut(r *http.Request, cib_data *Cib) ([]byte, error) {
+func MarshalOut(r *http.Request, easyStruct interface{}) ([]byte, error) {
 	value := r.Header.Get("PrettyPrint")
 	if value == "" || value == "1" {
-		return json.MarshalIndent(&cib_data, "", "  ")
+		return json.MarshalIndent(easyStruct, "", "  ")
 	}
-	return json.Marshal(&cib_data)
+	return json.Marshal(easyStruct)
 }
 
-func handleConfigApi(w http.ResponseWriter, r *http.Request, cib_data string) bool {
+func handleConfiguration(w http.ResponseWriter, r *http.Request, cib_data string) bool {
 	// parse xml into Cib struct
 	var cib Cib
 	err := xml.Unmarshal([]byte(cib_data), &cib)
@@ -160,10 +160,13 @@ func handleConfigApi(w http.ResponseWriter, r *http.Request, cib_data string) bo
 
 	w.Header().Set("Content-Type", "application/json")
 
-	configHandle := map[string]func([]string, Cib) bool{
+	configHandle := map[string]func([]string, Cib) (bool, interface{}){
 		"nodes":        handleConfigNodes,
 		"resources":    handleConfigResources,
-		"cluster":      handleConfigCluster,
+		"primitives":	handleConfigPrimitives,
+		"groups":	handleConfigGroups,
+		"masters":	handleConfigMasters,
+		"cluster_property":      handleConfigCluster,
 		"constraints":  handleConfigConstraints,
 		"rsc_defaults": handleConfigRscDefaults,
 		"op_defaults":  handleConfigOpDefaults,
@@ -173,12 +176,13 @@ func handleConfigApi(w http.ResponseWriter, r *http.Request, cib_data string) bo
 		"fencing":      handleConfigFencing,
 	}
 
-	if !configHandle[cib.Configuration.URLType](urllist, cib) {
+	rc, easyStruct := configHandle[cib.Configuration.URLType](urllist, cib)
+	if !rc{
 		http.Error(w, fmt.Sprintf("No route for %v.", r.URL.Path), 500)
 		return false
 	}
 
-	jsonData, jsonError := MarshalOut(r, &cib)
+	jsonData, jsonError := MarshalOut(r, easyStruct)
 	if jsonError != nil {
 		log.Error(jsonError)
 		return false
@@ -202,12 +206,13 @@ func handleStatusApi(w http.ResponseWriter, r *http.Request, cib_data string) bo
 
 	w.Header().Set("Content-Type", "application/json")
 
-	configHandle := map[string]func([]string, Cib) bool{
+	configHandle := map[string]func([]string, Cib) (bool, interface{}){
 		"nodes":        handleStateNodes,
 		"resources":    handleStateResources,
 	}
 
-	if !configHandle[cib.Status.URLType](urllist, cib) {
+	rc, _ := configHandle[cib.Status.URLType](urllist, cib)
+	if !rc {
 		http.Error(w, fmt.Sprintf("No route for %v.", r.URL.Path), 500)
 		return false
 	}
