@@ -32,3 +32,7 @@ func handleConfigOpDefaults(urllist []string, cib Cib) (bool, interface{}) {
 	}
 	return true, nv
 }
+
+func handleStateSummary(urllist []string, cib Cib) (bool, interface{}) {
+	return true, nil
+}

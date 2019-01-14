@@ -211,7 +211,7 @@ func (handler *routeHandler) serveAPI(w http.ResponseWriter, r *http.Request, ro
 		}
 
 		prefix = route.Path + "/status/"
-		all_types = "(nodes|resources)"
+		all_types = "(nodes|resources|summary)"
 		match, _ = regexp.MatchString(prefix+all_types+"(/?|/.+/?)$", r.URL.Path)
 		if match {
 			return handleStatusApi(w, r, handler.cib.Get())

@@ -209,6 +209,7 @@ func handleStatusApi(w http.ResponseWriter, r *http.Request, cib_data string) bo
 	configHandle := map[string]func([]string, Cib) (bool, interface{}){
 		"nodes":        handleStateNodes,
 		"resources":    handleStateResources,
+		"summary":    handleStateSummary,
 	}
 
 	rc, _ := configHandle[cib.Status.URLType](urllist, cib)
