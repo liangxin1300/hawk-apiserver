@@ -4,6 +4,16 @@ import (
 	"encoding/xml"
 )
 
+type CrmMon struct {
+	XMLNAME		xml.Name	`xml:"crm_mon" json:"-"`
+	Summary		*Summary	`xml:"summary" json:"summary"`
+	Nodes		*Nodes		`xml:"nodes" json:"nodes"`
+	Resources	*Resources	`xml:"resources" json:"resources"`
+	NodeAttributes  *NodeAttributes `xml:"node_attributes" json:"node_attributes"`
+	NodeHistory	*NodeHistory	`xml:"node_history" json:"node_history"`
+	FenceHistory    *FenceHistory	`xml:"fence_history" json:"fence_history"`
+}
+
 type Cib struct {
 	XMLNAME         xml.Name       `xml:"cib" json:"-"`
 	ValidateWith    string         `xml:"validate-with,attr" json:"validate-with,omitempty"`
