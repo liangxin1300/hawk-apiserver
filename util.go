@@ -136,3 +136,11 @@ func checkBasicAuth(user, pass string) bool {
 	}
 	return true
 }
+
+func getStdout(cmd string) string {
+	out, err := exec.Command(cmd).Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return out
+}
