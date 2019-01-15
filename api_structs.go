@@ -12,6 +12,57 @@ type CrmMon struct {
 	NodeAttributes  *NodeAttributes `xml:"node_attributes" json:"node_attributes"`
 	NodeHistory	*NodeHistory	`xml:"node_history" json:"node_history"`
 	FenceHistory    *FenceHistory	`xml:"fence_history" json:"fence_history"`
+	Tickets		*Tickets	`xml:"tickets" json:"tickets"`
+	Bans		*Bans		`xml:"bans" json:"bans"`
+}
+
+type Summary struct {
+	XMLNAME			xml.Name		`xml:"summary" json:"-"`
+	Stack			*Stack			`xml:"stack" json:"stack"`
+	CurrentDc		*CurrentDc		`xml:"current_dc" json:"current_dc"`
+	LastUpdate		*LastUpdate		`xml:"last_update" json:"last_update"`
+	LastChange		*LastChange		`xml:"last_change" json:"last_change"`
+	NodesConfigured		*NodesConfigured	`xml:"nodes_configured" json:"nodes_configured"`
+	ResourcesConfigured	*ResourcesConfigured	`xml:"resources_configured" json:"resources_configured"`
+}
+
+type Stack struct {
+	XMLNAME			xml.Name		`xml:"stack" json:"-"`
+	Type			string			`xml:"type,attr" json:"type"`
+}
+
+type CurrentDc struct {
+	XMLNAME			xml.Name		`xml:"current_dc" json:"-"`
+	Present			string			`xml:"present,attr" json:"present"`
+	Version			string			`xml:"version,attr" json:"version"`
+	Name			string			`xml:"name,attr" json:"name"`
+	Id			string			`xml:"id,attr" json:"id"`
+	WithQuorum		string			`xml:"with_quorum,attr" json:"with_quorum"`
+}
+
+type LastUpdate struct {
+	XMLNAME			xml.Name		`xml:"last_update" json:"-"`
+	Time			string			`xml:"time,attr" json:"time"`
+}
+
+type LastChange struct {
+	XMLNAME			xml.Name		`xml:"last_change" json:"-"`
+	Time			string			`xml:"time,attr" json:"time"`
+	User			string			`xml:"user,attr" json:"user"`
+	Client			string			`xml:"client,attr" json:"client"`
+	Origin			string			`xml:"origin,attr" json:"origin"`
+}
+
+type NodesConfigured struct {
+	XMLNAME			xml.Name		`xml:"nodes_configured" json:"-"`
+	number			string			`xml:"number,attr" json:"number"`
+}
+
+type ResourcesConfigured struct {
+	XMLNAME			xml.Name		`xml:"resources_configured" json:"-"`
+	number			string			`xml:"number,attr" json:"number"`
+	disabled		string			`xml:"disabled,attr" json:"disabled"`
+	blocked			string			`xml:"blocked,attr" json:"blocked"`
 }
 
 type Cib struct {
